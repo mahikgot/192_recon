@@ -32,7 +32,6 @@ datas = []
 with open(args.filename, 'r') as f:
     splited = [data.split() for data in f.read().splitlines()[1:]]
     floated = [[float(x), float(y)] for x, y in splited]
-    first = find_first(floated)
     packets = [packet for packet in chunks(floated, 16)]
     ref = 5/1023
     for packet in packets:
