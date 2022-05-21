@@ -33,7 +33,7 @@ with open(args.filename, 'r') as f:
     splited = [data.split() for data in f.read().splitlines()[1:]]
     floated = [[float(x), float(y)] for x, y in splited]
     packets = [packet for packet in chunks(floated, 16)]
-    ref = 5/1023
+    ref = 5/1024
     for packet in packets:
         time =  packet[0][0]
         data = 0
@@ -42,16 +42,12 @@ with open(args.filename, 'r') as f:
             if bit[1] > 0:
                 data |= 0x1 << idx
                 ones += 1
-        data = (data*ref)
+        data = (data*ref) - 2.5
         if ones % 2:
             correct_par = 5
         else:
             correct_par = -5
-        try:
-            if correct_par != packet[11]:
-                wrongs.append(time)
-        except:
-            pass
+        if correct_par != packet[11][1]:
+            wrongs.append(time)
         times.append(time)
         datas.append(data)
-
