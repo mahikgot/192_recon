@@ -10,28 +10,11 @@ def chunks(lst, n):
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
 
-def find_first(lst):
-    ctr = 0
-    for idx, data in enumerate(lst):
-        if ctr == 3:
-            if data[1] > 0:
-                if idx - 15 > -1 and lst[idx-15][1] > 0:
-                    return idx - 15
-                else:
-                    ctr = 0
-            else:
-                ctr = 0
-        elif data[1] < 0:
-            ctr += 1
-        else:
-            ctr = 0
-
-wrongs = []
 times = []
 datas = []
 with open(args.filename, 'r') as f:
     splited = [data.split() for data in f.read().splitlines()[1:]]
-    floated = [[float(x), float(y)] for x, y in splited]
+    floated = [[float(x), int(y)] for x, y in splited]
     packets = [packet for packet in chunks(floated, 16)]
     ref = 5/1024
     for packet in packets:
@@ -51,3 +34,7 @@ with open(args.filename, 'r') as f:
             wrongs.append(time)
         times.append(time)
         datas.append(data)
+print(datas)
+with open('output.txt', 'w') as f:
+    for time, data in zip(times, datas):
+        f.write(str(time) + ' ' + str(data) + '\n')
